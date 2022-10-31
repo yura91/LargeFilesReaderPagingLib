@@ -3,23 +3,26 @@ package com.sharmadhiraj.androidpaginglibrarystepbystepimplementationguide.viewM
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.sharmadhiraj.androidpaginglibrarystepbystepimplementationguide.data.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
+import com.sharmadhiraj.androidpaginglibrarystepbystepimplementationguide.data.FilesDataSource
 
-class FilesLoadViewModel(context : Context) : ViewModel() {
-    var newsList: LiveData<PagedList<String>>
+class FilesLoadViewModel(context: Context) : ViewModel() {
+    var newsList: LiveData<PagingData<String>>
     private val pageSize = 1024
-    private val filesDataSourceFactory: FilesDataSourceFactory =
-        FilesDataSourceFactory(context)
 
     init {
-        val config = PagedList.Config.Builder()
-            .setPageSize(pageSize)
-            .setInitialLoadSizeHint(pageSize)
-            .setEnablePlaceholders(false)
-            .build()
-        newsList = LivePagedListBuilder(filesDataSourceFactory, config).build()
+        newsList = Pager(
+            config = PagingConfig(
+                pageSize = pageSize,
+                enablePlaceholders = false,
+                initialLoadSize = pageSize
+            ),
+            pagingSourceFactory = {
+                FilesDataSource(context)
+            }
+        ).liveData
     }
-
 }

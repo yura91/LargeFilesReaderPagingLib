@@ -1,6 +1,7 @@
 package com.sharmadhiraj.androidpaginglibrarystepbystepimplementationguide.data
 
 import android.content.Context
+import java.io.IOException
 
 /**
  * Класс для чтения файлов с логами
@@ -12,9 +13,10 @@ internal class LogFilesReader {
     /**
      * Метод чтения файлов с логами
      */
+    @Throws(IOException::class)
     fun readFiles(context: Context, positionStart: Int, blockSize: Int): String? {
         val byteArray = ByteArray(blockSize)
-        val inputStream = context.assets.open("20002216_ServerSequence.log")
+        val inputStream = context.assets.open("ServerSequence.log")
         inputStream.skip((positionStart * blockSize).toLong())
         val readNumber = inputStream.read(byteArray, 0, blockSize)
         inputStream.close()
